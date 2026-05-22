@@ -1,0 +1,889 @@
+{
+  "info": {
+    "name": "Teacher Panel Backend",
+    "description": "API collection for Teacher Panel Backend - MERN Stack",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Ideas",
+      "item": [
+        {
+          "name": "Get All Ideas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ideas",
+              "host": ["{{baseUrl}}"],
+              "path": ["ideas"]
+            },
+            "description": "Retrieve all ideas from the database"
+          }
+        },
+        {
+          "name": "Get Idea by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ideas/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["ideas", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "idea_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve a specific idea by its ID"
+          }
+        },
+        {
+          "name": "Create New Idea",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Smart Garden System\",\n  \"leader\": {\"name\": \"Alex Johnson\"},\n  \"team\": [{\"name\": \"Sarah Lee\"}, {\"name\": \"Mike Chen\"}],\n  \"session\": \"Morning\",\n  \"shortDescription\": \"An IoT based automated watering system using Arduino...\",\n  \"fullDescription\": \"This project aims to create an automated garden watering system using Arduino sensors and actuators to monitor soil moisture and water plants automatically.\",\n  \"status\": \"Pending\",\n  \"progress\": 0,\n  \"milestones\": {\"current\": \"Planning\", \"next\": \"Design\"}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ideas",
+              "host": ["{{baseUrl}}"],
+              "path": ["ideas"]
+            },
+            "description": "Create a new idea submission"
+          }
+        },
+        {
+          "name": "Update Idea",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Project Title\",\n  \"status\": \"Accepted\",\n  \"progress\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ideas/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["ideas", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "idea_id_here"
+                }
+              ]
+            },
+            "description": "Update an existing idea"
+          }
+        },
+        {
+          "name": "Update Idea Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Accepted\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ideas/:id/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["ideas", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "idea_id_here"
+                }
+              ]
+            },
+            "description": "Update the status of an idea"
+          }
+        },
+        {
+          "name": "Delete Idea",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ideas/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["ideas", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "idea_id_here"
+                }
+              ]
+            },
+            "description": "Delete an idea by its ID"
+          }
+        },
+        {
+          "name": "Get Ideas by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ideas/status/:status",
+              "host": ["{{baseUrl}}"],
+              "path": ["ideas", "status", ":status"],
+              "variable": [
+                {
+                  "key": "status",
+                  "value": "Pending"
+                }
+              ]
+            },
+            "description": "Retrieve ideas filtered by status (Pending, Accepted, Rejected)"
+          }
+        },
+        {
+          "name": "Get Ideas by Session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ideas/session/:session",
+              "host": ["{{baseUrl}}"],
+              "path": ["ideas", "session", ":session"],
+              "variable": [
+                {
+                  "key": "session",
+                  "value": "Morning"
+                }
+              ]
+            },
+            "description": "Retrieve ideas filtered by session (Morning, Evening)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Issues",
+      "item": [
+        {
+          "name": "Get All Issues",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/issues",
+              "host": ["{{baseUrl}}"],
+              "path": ["issues"]
+            },
+            "description": "Retrieve all student issues"
+          }
+        },
+        {
+          "name": "Get Issue by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/issues/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["issues", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "issue_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve a specific issue by its ID"
+          }
+        },
+        {
+          "name": "Create New Issue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"Technical\",\n  \"description\": \"Having trouble connecting to the database server\",\n  \"studentName\": \"Alex Johnson\",\n  \"status\": \"Pending\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/issues",
+              "host": ["{{baseUrl}}"],
+              "path": ["issues"]
+            },
+            "description": "Create a new student issue"
+          }
+        },
+        {
+          "name": "Reply to Issue",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teacherReply\": \"Try restarting the MongoDB service and check your connection string.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/issues/:id/reply",
+              "host": ["{{baseUrl}}"],
+              "path": ["issues", ":id", "reply"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "issue_id_here"
+                }
+              ]
+            },
+            "description": "Reply to a student issue"
+          }
+        },
+        {
+          "name": "Update Issue Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Resolved\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/issues/:id/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["issues", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "issue_id_here"
+                }
+              ]
+            },
+            "description": "Update the status of an issue"
+          }
+        },
+        {
+          "name": "Delete Issue",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/issues/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["issues", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "issue_id_here"
+                }
+              ]
+            },
+            "description": "Delete an issue by its ID"
+          }
+        },
+        {
+          "name": "Get Issues by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/issues/category/:category",
+              "host": ["{{baseUrl}}"],
+              "path": ["issues", "category", ":category"],
+              "variable": [
+                {
+                  "key": "category",
+                  "value": "Technical"
+                }
+              ]
+            },
+            "description": "Retrieve issues filtered by category"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "Get All Feedback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback"]
+            },
+            "description": "Retrieve all teacher feedback"
+          }
+        },
+        {
+          "name": "Get Feedback by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feedback/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "feedback_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve specific feedback by ID"
+          }
+        },
+        {
+          "name": "Get Feedback by Idea ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feedback/idea/:ideaId",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback", "idea", ":ideaId"],
+              "variable": [
+                {
+                  "key": "ideaId",
+                  "value": "idea_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve feedback for a specific idea"
+          }
+        },
+        {
+          "name": "Create New Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ideaId\": \"idea_id_here\",\n  \"ideaTitle\": \"Smart Garden System\",\n  \"leaderName\": \"Alex Johnson\",\n  \"feedback\": \"Great concept! Focus on the sensor accuracy.\",\n  \"status\": \"Feedback Sent\",\n  \"teacherName\": \"Teacher\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback"]
+            },
+            "description": "Create new teacher feedback"
+          }
+        },
+        {
+          "name": "Delete Feedback",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feedback/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "feedback_id_here"
+                }
+              ]
+            },
+            "description": "Delete feedback by ID"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Uploads",
+      "item": [
+        {
+          "name": "Get All Uploads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/uploads",
+              "host": ["{{baseUrl}}"],
+              "path": ["uploads"]
+            },
+            "description": "Retrieve all file uploads"
+          }
+        },
+        {
+          "name": "Get Upload by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/uploads/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["uploads", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "upload_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve specific upload by ID"
+          }
+        },
+        {
+          "name": "Create New Upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"project_documentation.pdf\",\n  \"size\": \"2.5 MB\",\n  \"type\": \"application/pdf\",\n  \"announcement\": \"Please review the project documentation\",\n  \"uploadedBy\": \"Teacher\",\n  \"uploadDate\": \"2026-05-20T10:00:00Z\",\n  \"data\": \"base64_encoded_file_data_here\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/uploads",
+              "host": ["{{baseUrl}}"],
+              "path": ["uploads"]
+            },
+            "description": "Create a new file upload"
+          }
+        },
+        {
+          "name": "Delete Upload",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/uploads/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["uploads", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "upload_id_here"
+                }
+              ]
+            },
+            "description": "Delete upload by ID"
+          }
+        },
+        {
+          "name": "Get Uploads by Teacher",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/uploads/teacher/:teacherName",
+              "host": ["{{baseUrl}}"],
+              "path": ["uploads", "teacher", ":teacherName"],
+              "variable": [
+                {
+                  "key": "teacherName",
+                  "value": "Teacher"
+                }
+              ]
+            },
+            "description": "Retrieve uploads filtered by teacher name"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progress",
+      "item": [
+        {
+          "name": "Get All Progress",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress"]
+            },
+            "description": "Retrieve all student progress records"
+          }
+        },
+        {
+          "name": "Get Progress by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/progress/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "progress_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve specific progress by ID"
+          }
+        },
+        {
+          "name": "Get Progress by Leader Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/progress/leader/:leaderName",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "leader", ":leaderName"],
+              "variable": [
+                {
+                  "key": "leaderName",
+                  "value": "Alex Johnson"
+                }
+              ]
+            },
+            "description": "Retrieve progress for a specific leader"
+          }
+        },
+        {
+          "name": "Create New Progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectName\": \"Smart Garden System\",\n  \"leaderName\": \"Alex Johnson\",\n  \"members\": [\"Sarah Lee\", \"Mike Chen\"],\n  \"progress\": 45,\n  \"tasks\": [\n    {\"title\": \"Design circuit\", \"status\": \"Completed\"},\n    {\"title\": \"Write code\", \"status\": \"In Progress\"},\n    {\"title\": \"Test sensors\", \"status\": \"Pending\"}\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress"]
+            },
+            "description": "Create a new progress record"
+          }
+        },
+        {
+          "name": "Update Progress",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"progress\": 60,\n  \"tasks\": [\n    {\"title\": \"Design circuit\", \"status\": \"Completed\"},\n    {\"title\": \"Write code\", \"status\": \"Completed\"},\n    {\"title\": \"Test sensors\", \"status\": \"In Progress\"}\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "progress_id_here"
+                }
+              ]
+            },
+            "description": "Update an existing progress record"
+          }
+        },
+        {
+          "name": "Update Progress Percentage",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"progress\": 75\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/:id/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", ":id", "progress"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "progress_id_here"
+                }
+              ]
+            },
+            "description": "Update the progress percentage"
+          }
+        },
+        {
+          "name": "Add Task to Progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Final testing\",\n  \"status\": \"Pending\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/:id/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", ":id", "tasks"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "progress_id_here"
+                }
+              ]
+            },
+            "description": "Add a new task to progress"
+          }
+        },
+        {
+          "name": "Update Task Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/:id/tasks/:taskId",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", ":id", "tasks", ":taskId"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "progress_id_here"
+                },
+                {
+                  "key": "taskId",
+                  "value": "task_id_here"
+                }
+              ]
+            },
+            "description": "Update the status of a specific task"
+          }
+        },
+        {
+          "name": "Delete Progress",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/progress/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "progress_id_here"
+                }
+              ]
+            },
+            "description": "Delete progress by ID"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get All Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"]
+            },
+            "description": "Retrieve all notifications"
+          }
+        },
+        {
+          "name": "Get Notification by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "notification_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve specific notification by ID"
+          }
+        },
+        {
+          "name": "Get Unread Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/unread/count",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "unread", "count"]
+            },
+            "description": "Get count of unread notifications"
+          }
+        },
+        {
+          "name": "Create New Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ideaId\": \"idea_id_here\",\n  \"title\": \"New Idea Submitted\",\n  \"leaderName\": \"Alex Johnson\",\n  \"read\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"]
+            },
+            "description": "Create a new notification"
+          }
+        },
+        {
+          "name": "Mark as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/:id/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", ":id", "read"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "notification_id_here"
+                }
+              ]
+            },
+            "description": "Mark a notification as read"
+          }
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/read-all",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "read-all"]
+            },
+            "description": "Mark all notifications as read"
+          }
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "notification_id_here"
+                }
+              ]
+            },
+            "description": "Delete notification by ID"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Check Backend Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Check if backend is running"
+          }
+        }
+      ]
+    }
+  ]
+}
