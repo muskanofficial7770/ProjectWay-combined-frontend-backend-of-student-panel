@@ -14,6 +14,15 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  status: {
+    type: String,
+    enum: ['Accepted', 'Rejected'],
+    required: true
+  },
+  message: {
+    type: String,
+    required: true
+  },
   read: {
     type: Boolean,
     default: false

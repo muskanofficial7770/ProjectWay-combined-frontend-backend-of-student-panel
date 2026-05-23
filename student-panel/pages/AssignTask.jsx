@@ -24,9 +24,8 @@ const AssignTask = ({ onAddTask, leaderName, members, leaderPassword }) => {
         </div>
         <h2 className="assign-access-title">Access Restricted</h2>
         <p className="assign-access-text">
-          Only the Group Leader can assign tasks. On{" "}
-          <strong>Progress Tracking</strong>, save your project name, then save
-          your team (leader name and password) to unlock this page.
+          Only the Group Leader can assign tasks.
+          The leader must enter the same password from the Progress Tracking page to unlock this page.
         </p>
       </div>
     );
@@ -185,7 +184,7 @@ const AssignTask = ({ onAddTask, leaderName, members, leaderPassword }) => {
               value={newTaskName}
               onChange={(e) => setNewTaskName(e.target.value)}
               className="assign-input"
-              placeholder="e.g. Conduct user interviews"
+              placeholder="Enter task description like 'Design the homepage'..."
               type="text"
             />
           </div>
@@ -202,7 +201,7 @@ const AssignTask = ({ onAddTask, leaderName, members, leaderPassword }) => {
                 className="assign-select"
               >
                 <option value="">Select a member...</option>
-                <option value={leaderName}>{leaderName} (You)</option>
+                <option value={leaderName}>{leaderName} (leader)</option>
                 {members.map((member, idx) => (
                   <option key={idx} value={member}>
                     {member}

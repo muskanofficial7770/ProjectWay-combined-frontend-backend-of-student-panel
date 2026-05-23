@@ -23,10 +23,32 @@ exports.getNotificationById = async (req, res) => {
   }
 };
 
+// Get notifications by leader name (student's notifications)
+exports.getNotificationsByLeader = async (req, res) => {
+  try {
+    const { leaderName } = req.params;
+    const notifications = await Notification.find({ leaderName }).sort({ submittedAt: -1 });
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get unread notifications count
 exports.getUnreadCount = async (req, res) => {
   try {
     const count = await Notification.countDocuments({ read: false });
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get unread notifications count by leader
+exports.getUnreadCountByLeader = async (req, res) => {
+  try {
+    const { leaderName } = req.params;
+    const count = await Notification.countDocuments({ leaderName, read: false });
     res.json({ count });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -66,6 +88,17 @@ exports.markAllAsRead = async (req, res) => {
   try {
     await Notification.updateMany({ read: false }, { read: true });
     res.json({ message: 'All notifications marked as read' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Mark all notifications as read by leader
+exports.markAllAsReadByLeader = async (req, res) => {
+  try {
+    const { leaderName } = req.params;
+    await Notification.updateMany({ leaderName, read: false }, { read: true });
+    res.json({ message: 'All notifications marked as read for this leader' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

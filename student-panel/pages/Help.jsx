@@ -7,10 +7,10 @@ const Help = () => {
 
   const handleDescriptionChange = (e) => {
     const text = e.target.value;
-    if (text.length <= 500) {
+    
       setIssueDescription(text);
       setCharCount(text.length);
-    }
+  
   };
 
   const handleSubmit = (e) => {
@@ -85,7 +85,7 @@ const Help = () => {
 
             <div className="help-form-group">
               <label className="help-label" htmlFor="issue-description">
-                Describe your Issue/Problem
+                Describe your Issue/Problem.
               </label>
               <textarea 
                 className="help-textarea" 
@@ -93,8 +93,9 @@ const Help = () => {
                 placeholder="Please provide specific details about what you're experiencing..."
                 value={issueDescription}
                 onChange={handleDescriptionChange}
+                maxLength={1000}
               ></textarea>
-              <p className="help-char-count">{charCount}/500 characters</p>
+              <p className="help-char-count">{charCount}/1000 characters</p>
             </div>
 
             <div className="help-footer">

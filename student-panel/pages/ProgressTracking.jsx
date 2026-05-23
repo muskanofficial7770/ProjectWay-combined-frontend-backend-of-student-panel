@@ -46,11 +46,17 @@ const ProgressTracking = ({
   };
 
   const handleSaveTeamClick = () => {
-    const leader = leaderDraft.trim();
-    if (!leader) return;
-    if (!passwordDraft.trim()) return;
-    onSaveTeam(leader, pendingMembers, passwordDraft.trim());
-  };
+  const leader = leaderDraft.trim();
+
+  if (!leader) return;
+
+  if (passwordDraft.trim().length < 6) {
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+
+  onSaveTeam(leader, pendingMembers, passwordDraft.trim());
+};
 
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((t) => t.status === "Completed").length;
@@ -168,23 +174,16 @@ const ProgressTracking = ({
           <div className="pt-card-body pt-card-body-step2">
             <div className="pt-field">
               <label className="pt-field-label" htmlFor="pt-leader-name">
-                Leader name (you)
+                Leader name 
               </label>
-              <div className="pt-input-icon-wrapper">
-                <span className="pt-input-icon">
-                  <span className="material-symbols-outlined pt-input-icon-inner">
-                    person_check
-                  </span>
-                </span>
-                <input
-                  id="pt-leader-name"
-                  type="text"
-                  value={leaderDraft}
-                  onChange={(e) => setLeaderDraft(e.target.value)}
-                  placeholder="Type your name here…"
-                  className="pt-input pt-input-with-icon"
-                />
-              </div>
+              <input
+                id="pt-leader-name"
+                type="text"
+                value={leaderDraft}
+               onChange={(e) => setLeaderDraft(e.target.value)}
+               placeholder="Enter your name"
+               className="pt-input"
+              />
             </div>
 
             <div className="pt-field">
@@ -201,7 +200,7 @@ const ProgressTracking = ({
                 autoComplete="new-password"
               />
               <p className="pt-help-text">
-                Used when saving your team; it is not shown again on this page.
+                The leader should remember the password because it will be used when assigning tasks.
               </p>
             </div>
 
@@ -215,9 +214,6 @@ const ProgressTracking = ({
                   type="text"
                   value={newMemberName}
                   onChange={(e) => setNewMemberName(e.target.value)}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && handleAddMemberClick()
-                  }
                   placeholder="Enter member name"
                   className="pt-input pt-input-flex"
                 />
@@ -247,7 +243,7 @@ const ProgressTracking = ({
                 ))}
                 {pendingMembers.length === 0 && (
                   <span className="pt-member-empty">
-                    No members added yet (optional).
+                    No members added yet.
                   </span>
                 )}
               </div>
@@ -264,9 +260,7 @@ const ProgressTracking = ({
               >
                 Save team
               </button>
-              <p className="pt-help-text">
-                Saving unlocks Assign Task for the leader name you entered.
-              </p>
+ 
             </div>
           </div>
         </div>
@@ -282,7 +276,7 @@ const ProgressTracking = ({
           <p className="pt-subtitle">
             {isGroupProfileSaved
               ? "Your project and group are set. Track tasks below."
-              : "Name your project, then add the leader password and members."}
+              : "Enter your project name, add your group members, view tasks and track progress as tasks are completed."}
           </p>
         </div>
       </div>

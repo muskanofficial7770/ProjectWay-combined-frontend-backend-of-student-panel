@@ -223,10 +223,15 @@ const SubmitIdea = () => {
                 placeholder="Describe your project idea including the problem it solves and any technologies you plan to use. "
                 rows={5}
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                    if (e.target.value.length <= 1000) {
+                     setDescription(e.target.value);
+                   }
+                 }  }
+                maxLength={1000}
               ></textarea>
               {errors.description && <span className="error-message">{errors.description}</span>}
-              <p className="si-counter">{description.length} / 500 characters</p>
+              <p className="si-counter">{description.length} / 1000 characters</p>
             </div>
 
             <div className="si-field si-field-full">

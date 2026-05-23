@@ -20,6 +20,15 @@ router.patch('/:id/read', notificationController.markAsRead);
 // Mark all notifications as read
 router.patch('/read-all', notificationController.markAllAsRead);
 
+// Get notifications by leader name (student's notifications)
+router.get('/leader/:leaderName', notificationController.getNotificationsByLeader);
+
+// Get unread count by leader
+router.get('/leader/:leaderName/unread', notificationController.getUnreadCountByLeader);
+
+// Mark all notifications as read by leader
+router.patch('/leader/:leaderName/read-all', notificationController.markAllAsReadByLeader);
+
 // Delete notification
 router.delete('/:id', notificationController.deleteNotification);
 

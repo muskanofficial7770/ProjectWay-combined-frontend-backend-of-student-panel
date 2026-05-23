@@ -1,4 +1,5 @@
 const Idea = require('../models/Idea');
+const Notification = require('../models/Notification');
 
 // Get all ideas
 exports.getAllIdeas = async (req, res) => {
@@ -55,14 +56,37 @@ exports.updateIdea = async (req, res) => {
 exports.updateIdeaStatus = async (req, res) => {
   try {
     const { status } = req.body;
+    
+    // Get the current idea to access its details
+    const currentIdea = await Idea.findById(req.params.id);
+    if (!currentIdea) {
+      return res.status(404).json({ message: 'Idea not found' });
+    }
+
+    // Update the idea status
     const idea = await Idea.findByIdAndUpdate(
       req.params.id,
       { status },
       { new: true, runValidators: true }
     );
-    if (!idea) {
-      return res.status(404).json({ message: 'Idea not found' });
+
+    // Create a notification if status is Accepted or Rejected
+    if (status === 'Accepted' || status === 'Rejected') {
+      const notificationMessage = status === 'Accepted' 
+        ? `Your idea "${idea.title}" has been accepted!`
+        : `Your idea "${idea.title}" has been rejected.`;
+
+      const notification = new Notification({
+        ideaId: idea._id,
+        title: idea.title,
+        leaderName: idea.leader.name,
+        status: status,
+        message: notificationMessage
+      });
+
+      await notification.save();
     }
+
     res.json(idea);
   } catch (error) {
     res.status(400).json({ message: error.message });
