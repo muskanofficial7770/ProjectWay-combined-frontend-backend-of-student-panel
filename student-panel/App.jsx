@@ -192,10 +192,7 @@ function App() {
           {/* Mobile Header */}
           <header className="app-mobile-header">
             <div className="app-brand">
-              <span className="material-symbols-outlined app-brand-icon">
-                school
-              </span>
-              <span className="app-brand-text">StudentHub</span>
+              <span className="app-brand-text">Student Panel</span>
             </div>
             <button
               onClick={() => setIsMobileMenuOpen(true)}

@@ -58,18 +58,10 @@ const Sidebar = ({
         }
       >
         <div className="sb-header">
-          <div className="sb-logo-box">
-            <span className="material-symbols-outlined sb-logo-icon">
-              school
-            </span>
-          </div>
           <div>
             <h1 className="sb-title">
-              {isEduDashContext ? "EduDash" : "StudentHub"}
+              {isEduDashContext ? "Task Management" : "Student Panel"}
             </h1>
-            <p className="sb-subtitle">
-              {isEduDashContext ? "Project Alpha" : "Student Portal"}
-            </p>
           </div>
         </div>
 
@@ -87,11 +79,9 @@ const Sidebar = ({
                   onClick={() => onNavigate("progress")}
                   className="sb-project-link"
                 >
-                  <span className="material-symbols-outlined sb-project-icon">
-                    rocket_launch
-                  </span>
+                  
                   <span className="sb-project-label">
-                    Project Alpha (EduDash)
+                    Task Management
                   </span>
                 </button>}
               </div>
@@ -127,13 +117,6 @@ const Sidebar = ({
           )}
         </nav>
 
-        <div className="sb-footer">
-          <div className="sb-user-row">
-            <div className="sb-user-text">
-              <p className="sb-user-name">Jane Doe</p>
-            </div>
-          </div>
-        </div>
       </aside>
     </>
   );

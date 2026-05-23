@@ -82,6 +82,10 @@ const Dashboard = () => {
 
   return (
     <div className="dash-container">
+      <button className="dash-notification-icon" type="button" aria-label="Notifications">
+        <span className="material-symbols-outlined">notifications</span>
+      </button>
+
       {/* Welcome Banner */}
       <div className="dash-welcome-banner">
         <div 
@@ -120,19 +124,6 @@ const Dashboard = () => {
           <div className="dash-stat-content">
             <h3 className="dash-stat-label">Approved Ideas</h3>
             <p className="dash-stat-value">{ideaStats.approved}</p>
-          </div>
-        </div>
-
-        <div className="dash-stat-card">
-          <div className="dash-stat-header">
-            <div className="dash-stat-icon dash-stat-icon-amber">
-              <span className="material-symbols-outlined text-2xl">hourglass_empty</span>
-            </div>
-            <span className="dash-stat-badge dash-stat-badge-amber">In Progress</span>
-          </div>
-          <div className="dash-stat-content">
-            <h3 className="dash-stat-label">Ideas in Progress</h3>
-            <p className="dash-stat-value">{ideaStats.inProgress}</p>
           </div>
         </div>
 

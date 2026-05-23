@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const SubmitIdea = () => {
   const [projectName, setProjectName] = useState('');
@@ -8,6 +8,42 @@ const SubmitIdea = () => {
   const [members, setMembers] = useState([]);
   const [memberInput, setMemberInput] = useState('');
   const [errors, setErrors] = useState({});
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  // Load draft on component mount
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('submitIdeaDraft');
+    if (savedDraft) {
+      try {
+        const draft = JSON.parse(savedDraft);
+        setProjectName(draft.projectName || '');
+        setSession(draft.session || '');
+        setLeaderName(draft.leaderName || '');
+        setDescription(draft.description || '');
+        setMembers(draft.members || []);
+      } catch (error) {
+        console.error('Error loading draft:', error);
+      }
+    }
+  }, []);
+
+  const handleSaveDraft = () => {
+    const draftData = {
+      projectName,
+      session,
+      leaderName,
+      description,
+      members,
+      savedAt: new Date().toISOString()
+    };
+
+    localStorage.setItem('submitIdeaDraft', JSON.stringify(draftData));
+    
+    setShowSuccessMessage(true);
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 3000);
+  };
 
   const handleAddMember = (e) => {
     if (e.key === 'Enter') {
@@ -102,6 +138,9 @@ const SubmitIdea = () => {
     // Show success message
     alert('Project idea submitted successfully!');
     
+    // Clear saved draft after successful submission
+    localStorage.removeItem('submitIdeaDraft');
+    
     // Reset form
     setProjectName('');
     setSession('');
@@ -118,10 +157,19 @@ const SubmitIdea = () => {
         <div>
           <h2 className="si-title">Submit Project Idea</h2>
           <p className="si-subtitle">
-            Share your innovation with the faculty for review.
+            Submit your ideas to the teachers for review. Make sure to provide a clear description and add your team members if you have any. 
           </p>
         </div>
       </div>
+
+      {showSuccessMessage && (
+        <div className="si-success-message">
+          <span className="material-symbols-outlined si-success-icon">
+            check_circle
+          </span>
+          <span>Draft Saved Successfully</span>
+        </div>
+      )}
 
       <div className="si-card">
         {/* Form */}
@@ -131,7 +179,7 @@ const SubmitIdea = () => {
               <label className="si-label">Project Idea Name</label>
               <input
                 className={`si-input ${errors.projectName ? 'error' : ''}`}
-                placeholder="e.g. AI-Powered Recycling Bin"
+                placeholder="Enter your project idea name like ecommerce website ..."
                 type="text"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
@@ -158,28 +206,21 @@ const SubmitIdea = () => {
 
             <div className="si-field">
               <label className="si-label">Leader Name</label>
-              <div className="si-input-icon-wrapper">
-                <span className="si-input-icon-prefix">
-                  <span className="material-symbols-outlined si-input-icon-person">
-                    person
-                  </span>
-                </span>
-                <input
-                  className={`si-input-with-icon ${errors.leaderName ? 'error' : ''}`}
-                  placeholder="Enter your name"
-                  type="text"
-                  value={leaderName}
-                  onChange={(e) => setLeaderName(e.target.value)}
-                />
-              </div>
+              <input
+                className={`si-input ${errors.leaderName ? 'error' : ''}`}
+                placeholder="Enter your name"
+                type="text"
+                value={leaderName}
+                onChange={(e) => setLeaderName(e.target.value)}
+              />
               {errors.leaderName && <span className="error-message">{errors.leaderName}</span>}
             </div>
 
             <div className="si-field si-field-full">
               <label className="si-label">Description</label>
               <textarea
-                className={`w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm ${errors.description ? 'error' : ''}`}
-                placeholder="Describe the core problem, your proposed solution, and the technologies you plan to use..."
+                className={`si-textarea ${errors.description ? 'error' : ''}`}
+                placeholder="Describe your project idea including the problem it solves and any technologies you plan to use. "
                 rows={5}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -225,15 +266,10 @@ const SubmitIdea = () => {
           </div>
 
           <div className="si-footer-row">
-            <button
-              type="button"
-              className="si-btn-cancel"
-            >
-              Cancel
-            </button>
             <div className="si-footer-actions">
               <button
                 type="button"
+                onClick={handleSaveDraft}
                 className="si-btn-secondary"
               >
                 Save Draft
