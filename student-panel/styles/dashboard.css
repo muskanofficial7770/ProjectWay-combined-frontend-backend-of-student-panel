@@ -9,7 +9,7 @@
 
 .dash-notification-icon {
   position: absolute;
-  top: 1rem;
+  top: -1rem;
   right: 0;
   width: 2.75rem;
   height: 2.75rem;
@@ -22,7 +22,7 @@
   color: #1f2937;
   cursor: pointer;
   transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
-  z-index: 30;
+  z-index: 100;
 }
 
 .dash-notification-icon:hover {
@@ -45,6 +45,7 @@
   display: flex;
   align-items: flex-end;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
 }
 
 .dash-welcome-bg {
