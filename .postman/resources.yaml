@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: b0b0a334-cdee-4c1d-8dc4-eed3e0f75e1c
+
+localResources:
+  collections:
+    - ..\teacher-panel\backend\Teacher_Panel_Backend.postman_collection.json
