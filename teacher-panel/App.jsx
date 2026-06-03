@@ -4,6 +4,7 @@ import DashboardView from './components/DashboardView';
 import AllIdeasView from './components/AllIdeasView';
 import ProgressView from './components/ProgressView';
 import Upload from './components/Upload';
+import { teacherPanelApi } from './api/teacherPanelApi';
 import './styles/main.css';
 import './styles/utilities.css';
 import './styles/scrollbar.css';
@@ -29,11 +30,12 @@ const Navigation = () => {
   }, []);
 
   useEffect(() => {
-    const loadNotifications = () => {
+    const loadNotifications = async () => {
       try {
-        const saved = JSON.parse(localStorage.getItem('teacherIdeaNotifications') || '[]');
-        setIdeaNotifications(saved.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)));
-      } catch {
+        const notifications = await teacherPanelApi.notifications.getAllNotifications();
+        setIdeaNotifications(notifications.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)));
+      } catch (error) {
+        console.error('Error loading notifications:', error);
         setIdeaNotifications([]);
       }
     };
@@ -55,16 +57,20 @@ const Navigation = () => {
 
   const unreadNotificationCount = ideaNotifications.filter((n) => !n.read).length;
 
-  const handleNotificationClick = (notification) => {
-    const updated = ideaNotifications.map((n) =>
-      n.id === notification.id ? { ...n, read: true } : n
-    );
-    localStorage.setItem('teacherIdeaNotifications', JSON.stringify(updated));
-    setIdeaNotifications(updated);
-    setNotificationSelectId(notification.ideaId);
-    setShowNotifications(false);
-    if (!isActive('/dashboard')) {
-      navigate('/teacher/dashboard');
+  const handleNotificationClick = async (notification) => {
+    try {
+      await teacherPanelApi.notifications.markAsRead(notification._id);
+      const updated = ideaNotifications.map((n) =>
+        n._id === notification._id ? { ...n, read: true } : n
+      );
+      setIdeaNotifications(updated);
+      setNotificationSelectId(notification.ideaId);
+      setShowNotifications(false);
+      if (!isActive('/dashboard')) {
+        navigate('/teacher/dashboard');
+      }
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
     }
   };
 
