@@ -8,6 +8,7 @@ import ProgressTracking from "./pages/ProgressTracking";
 import AssignTask from "./pages/AssignTask";
 import Help from "./pages/Help";
 import DiagramEditor from "./pages/DiagramEditor";
+import { saveTeam, getTeamByProject, createTask, getTasksByProject, toggleTaskStatus } from "./api/studentPanelApi";
 import "./styles/app.css";
 import "./styles/dashboard.css";
 import "./styles/submit-idea.css";
@@ -47,7 +48,7 @@ function App() {
   const canSubmitIdea = !studentPermissions.includes('idea.submit');
   const canViewHelp = !studentPermissions.includes('help.view');
 
-  const saveProjectName = (name) => {
+  const saveProjectName = async (name) => {
     const trimmed = name.trim();
     if (!trimmed) return;
     setProjectName(trimmed);
@@ -57,53 +58,93 @@ function App() {
     setIsGroupProfileSaved(false);
   };
 
-  const saveGroupTeam = (leader, memberList, password) => {
-    setLeaderName(leader.trim());
-    setMembers(memberList);
-    setLeaderPassword(password);
-    setIsGroupProfileSaved(true);
-  };
-
-  const handleAddTask = (newTask) => {
-    setTasks((prev) => [...prev, newTask]);
-  };
-
-  const handleToggleTask = (taskId) => {
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId
-          ? {
-              ...t,
-              status: t.status === "Completed" ? "Pending" : "Completed",
-            }
-          : t
-      )
-    );
-  };
-
-  // Save progress data to localStorage whenever it changes
-  const saveProgressToLocalStorage = () => {
-    const totalTasks = tasks.length;
-    const completedTasks = tasks.filter((t) => t.status === "Completed").length;
-    const progressPercentage =
-      totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
-
-    const progressData = {
+  const saveGroupTeam = async (leader, memberList, password) => {
+    const result = await saveTeam({
       projectName: projectName,
-      leaderName: leaderName,
-      members: members,
-      tasks: tasks,
-      progress: progressPercentage,
-      timestamp: new Date().toISOString()
-    };
-
-    localStorage.setItem('studentProgressData', JSON.stringify(progressData));
+      leaderName: leader.trim(),
+      leaderPassword: password,
+      members: memberList
+    });
+    
+    if (result.success) {
+      setLeaderName(leader.trim());
+      setMembers(memberList);
+      setLeaderPassword(password);
+      setIsGroupProfileSaved(true);
+    } else {
+      alert(result.message || 'Error saving team');
+    }
   };
 
-  // Call saveProgressToLocalStorage whenever relevant state changes
-  React.useEffect(() => {
-    saveProgressToLocalStorage();
-  }, [tasks, projectName, leaderName, members]);
+  const handleAddTask = async (newTask) => {
+    const result = await createTask({
+      name: newTask.name,
+      assignedTo: newTask.assignedTo,
+      deadline: newTask.deadline,
+      projectName: projectName,
+      leaderName: leaderName
+    });
+    
+    if (result.success) {
+      setTasks((prev) => [...prev, result.task]);
+    } else {
+      alert(result.message || 'Error creating task');
+    }
+  };
+
+  const handleToggleTask = async (taskId) => {
+    const result = await toggleTaskStatus(taskId);
+    
+    if (result.success) {
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === taskId
+            ? {
+                ...t,
+                status: t.status === "Completed" ? "Pending" : "Completed",
+              }
+            : t
+        )
+      );
+    } else {
+      alert(result.message || 'Error toggling task status');
+    }
+  };
+
+  // Load team data from API on mount
+  useEffect(() => {
+    const loadTeamData = async () => {
+      // Try to load from localStorage first to get project name
+      const savedProgress = localStorage.getItem('studentProgressData');
+      if (savedProgress) {
+        try {
+          const progressData = JSON.parse(savedProgress);
+          if (progressData.projectName) {
+            setProjectName(progressData.projectName);
+            
+            // Load team data from API
+            const teamResult = await getTeamByProject(progressData.projectName);
+            if (teamResult.success && teamResult.team) {
+              setLeaderName(teamResult.team.leaderName);
+              setMembers(teamResult.team.members || []);
+              setLeaderPassword(teamResult.team.leaderPassword);
+              setIsGroupProfileSaved(true);
+            }
+            
+            // Load tasks from API
+            const tasksResult = await getTasksByProject(progressData.projectName);
+            if (tasksResult.success && tasksResult.tasks) {
+              setTasks(tasksResult.tasks);
+            }
+          }
+        } catch (error) {
+          console.error('Error loading saved data:', error);
+        }
+      }
+    };
+    
+    loadTeamData();
+  }, []);
 
   const renderContent = () => {
     switch (activePage) {

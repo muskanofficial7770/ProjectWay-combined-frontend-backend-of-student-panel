@@ -1,29 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { getAllFeedback } from '../api/studentPanelApi';
 
 const Feedback = () => {
   const [feedbacks, setFeedbacks] = useState([]);
 
   useEffect(() => {
-    // Load feedback from localStorage
-    const loadFeedbacks = () => {
-      const teacherFeedbacks = JSON.parse(localStorage.getItem('teacherFeedback') || '[]');
-      const studentIssues = JSON.parse(localStorage.getItem('studentIssues') || '[]');
-      
-      // Combine feedbacks and issue replies
-      const allFeedbacks = [
-        ...teacherFeedbacks,
-        ...studentIssues.filter(issue => issue.teacherReply).map(issue => ({
-          id: Date.now() + Math.random(),
-          ideaTitle: `${issue.category} Issue`,
-          leaderName: issue.studentName,
-          feedback: issue.teacherReply,
-          status: 'Issue Replied',
-          timestamp: issue.timestamp,
-          teacherName: 'Teacher'
-        }))
-      ];
-      
-      setFeedbacks(allFeedbacks);
+    // Load feedback from API
+    const loadFeedbacks = async () => {
+      const result = await getAllFeedback();
+      if (result.success && result.feedbacks) {
+        setFeedbacks(result.feedbacks);
+      }
     };
 
     loadFeedbacks();

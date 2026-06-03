@@ -2,18 +2,24 @@ import Team from '../models/Team.js';
 
 // Create or update a team
 export const saveTeam = async (req, res) => {
+  console.log('👥 [Teams] Save team request received');
+  console.log('👥 [Teams] Request body:', req.body);
+  
   try {
     const { projectName, leaderName, leaderPassword, members } = req.body;
 
+    console.log('👥 [Teams] Checking if team exists for project:', projectName);
     // Check if project name already exists
     const existingTeam = await Team.findOne({ projectName });
     
     if (existingTeam) {
+      console.log('👥 [Teams] Updating existing team...');
       // Update existing team
       existingTeam.leaderName = leaderName;
       existingTeam.leaderPassword = leaderPassword;
       existingTeam.members = members;
       const updatedTeam = await existingTeam.save();
+      console.log('✅ [Teams] Team updated successfully:', projectName);
 
       res.status(200).json({ 
         success: true, 
@@ -21,6 +27,7 @@ export const saveTeam = async (req, res) => {
         team: updatedTeam 
       });
     } else {
+      console.log('👥 [Teams] Creating new team...');
       // Create new team
       const newTeam = new Team({
         projectName,
@@ -30,6 +37,7 @@ export const saveTeam = async (req, res) => {
       });
 
       const savedTeam = await newTeam.save();
+      console.log('✅ [Teams] Team created successfully:', projectName);
 
       res.status(201).json({ 
         success: true, 
@@ -38,7 +46,7 @@ export const saveTeam = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Error saving team:', error);
+    console.error('❌ [Teams] Error saving team:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error saving team', 
@@ -49,20 +57,25 @@ export const saveTeam = async (req, res) => {
 
 // Get team by project name
 export const getTeamByProject = async (req, res) => {
+  console.log('👥 [Teams] Get team by project request received');
+  console.log('👥 [Teams] Project name:', req.params.projectName);
+  
   try {
     const { projectName } = req.params;
     const team = await Team.findOne({ projectName });
 
     if (!team) {
+      console.log('⚠️ [Teams] Team not found:', projectName);
       return res.status(404).json({ 
         success: false, 
         message: 'Team not found' 
       });
     }
 
+    console.log('✅ [Teams] Team retrieved successfully:', projectName);
     res.status(200).json({ success: true, team });
   } catch (error) {
-    console.error('Error fetching team:', error);
+    console.error('❌ [Teams] Error fetching team:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error fetching team', 
@@ -73,11 +86,15 @@ export const getTeamByProject = async (req, res) => {
 
 // Verify leader password
 export const verifyLeaderPassword = async (req, res) => {
+  console.log('👥 [Teams] Verify leader password request received');
+  console.log('👥 [Teams] Project name:', req.body.projectName);
+  
   try {
     const { projectName, password } = req.body;
     const team = await Team.findOne({ projectName });
 
     if (!team) {
+      console.log('⚠️ [Teams] Team not found:', projectName);
       return res.status(404).json({ 
         success: false, 
         message: 'Team not found' 
@@ -85,12 +102,14 @@ export const verifyLeaderPassword = async (req, res) => {
     }
 
     if (team.leaderPassword !== password) {
+      console.log('⚠️ [Teams] Invalid password for project:', projectName);
       return res.status(401).json({ 
         success: false, 
         message: 'Invalid password' 
       });
     }
 
+    console.log('✅ [Teams] Password verified successfully for:', projectName);
     res.status(200).json({ 
       success: true, 
       message: 'Password verified successfully',
@@ -98,7 +117,7 @@ export const verifyLeaderPassword = async (req, res) => {
       members: team.members 
     });
   } catch (error) {
-    console.error('Error verifying password:', error);
+    console.error('❌ [Teams] Error verifying password:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error verifying password', 
@@ -109,12 +128,17 @@ export const verifyLeaderPassword = async (req, res) => {
 
 // Update project name
 export const updateProjectName = async (req, res) => {
+  console.log('👥 [Teams] Update project name request received');
+  console.log('👥 [Teams] Old project name:', req.body.oldProjectName);
+  console.log('👥 [Teams] New project name:', req.body.newProjectName);
+  
   try {
     const { oldProjectName, newProjectName } = req.body;
 
     const team = await Team.findOne({ projectName: oldProjectName });
 
     if (!team) {
+      console.log('⚠️ [Teams] Team not found:', oldProjectName);
       return res.status(404).json({ 
         success: false, 
         message: 'Team not found' 
@@ -123,6 +147,7 @@ export const updateProjectName = async (req, res) => {
 
     team.projectName = newProjectName;
     const updatedTeam = await team.save();
+    console.log('✅ [Teams] Project name updated successfully:', oldProjectName, '->', newProjectName);
 
     res.status(200).json({ 
       success: true, 
@@ -130,7 +155,7 @@ export const updateProjectName = async (req, res) => {
       team: updatedTeam 
     });
   } catch (error) {
-    console.error('Error updating project name:', error);
+    console.error('❌ [Teams] Error updating project name:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error updating project name', 
@@ -141,23 +166,28 @@ export const updateProjectName = async (req, res) => {
 
 // Delete team
 export const deleteTeam = async (req, res) => {
+  console.log('👥 [Teams] Delete team request received');
+  console.log('👥 [Teams] Project name:', req.params.projectName);
+  
   try {
     const { projectName } = req.params;
     const deletedTeam = await Team.findOneAndDelete({ projectName });
 
     if (!deletedTeam) {
+      console.log('⚠️ [Teams] Team not found:', projectName);
       return res.status(404).json({ 
         success: false, 
         message: 'Team not found' 
       });
     }
 
+    console.log('✅ [Teams] Team deleted successfully:', projectName);
     res.status(200).json({ 
       success: true, 
       message: 'Team deleted successfully' 
     });
   } catch (error) {
-    console.error('Error deleting team:', error);
+    console.error('❌ [Teams] Error deleting team:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error deleting team', 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FileViewer from '../components/FileViewer';
+import { getAllUploads, getIdeaStats } from '../api/studentPanelApi';
 
 const Dashboard = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -11,24 +12,24 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    // Load uploaded files from localStorage
-    const loadUploadedFiles = () => {
-      const files = JSON.parse(localStorage.getItem('teacherUploads') || '[]');
-      setUploadedFiles(files);
+    // Load uploaded files from API
+    const loadUploadedFiles = async () => {
+      const result = await getAllUploads();
+      if (result.success && result.uploads) {
+        setUploadedFiles(result.uploads);
+      }
     };
 
-    // Load idea statistics from localStorage
-    const loadIdeaStats = () => {
-      const ideas = JSON.parse(localStorage.getItem('studentIdeas') || '[]');
-      const submitted = ideas.length;
-      const approved = ideas.filter(idea => idea.status === 'Accepted').length;
-      const inProgress = ideas.filter(idea => idea.status === 'Pending').length;
-      
-      setIdeaStats({
-        submitted,
-        approved,
-        inProgress
-      });
+    // Load idea statistics from API
+    const loadIdeaStats = async () => {
+      const result = await getIdeaStats();
+      if (result.success && result.stats) {
+        setIdeaStats({
+          submitted: result.stats.submitted,
+          approved: result.stats.approved,
+          inProgress: result.stats.inProgress
+        });
+      }
     };
 
     loadUploadedFiles();

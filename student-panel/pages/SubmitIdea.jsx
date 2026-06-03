@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { submitIdea } from '../api/studentPanelApi';
 
 const SubmitIdea = () => {
   const [projectName, setProjectName] = useState('');
@@ -86,7 +87,7 @@ const SubmitIdea = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -94,46 +95,19 @@ const SubmitIdea = () => {
       return;
     }
 
-    // Check for duplicate submissions (any student with same idea)
-    const existingIdeas = JSON.parse(localStorage.getItem('studentIdeas') || '[]');
-    const isDuplicate = existingIdeas.some(idea => 
-      idea.title.toLowerCase().trim() === projectName.toLowerCase().trim() && 
-      idea.fullDescription.toLowerCase().trim() === description.toLowerCase().trim()
-    );
-
-    if (isDuplicate) {
-      alert('This project idea already submitted by another student! Please choose a different idea.');
-      return;
-    }
-
-    // Create new idea object
-    const newIdea = {
-      id: Date.now(), // Simple unique ID
+    // Submit idea to API
+    const result = await submitIdea({
       title: projectName,
       session: session,
-      leader: { name: leaderName },
-      shortDescription: description.substring(0, 100) + '...',
-      fullDescription: description,
-      team: members.map(name => ({ name })),
-      status: 'Pending',
-      submittedAt: new Date().toISOString()
-    };
-
-    const updatedIdeas = [...existingIdeas, newIdea];
-
-    // Save to localStorage
-    localStorage.setItem('studentIdeas', JSON.stringify(updatedIdeas));
-
-    const notifications = JSON.parse(localStorage.getItem('teacherIdeaNotifications') || '[]');
-    notifications.push({
-      id: Date.now(),
-      ideaId: newIdea.id,
-      title: newIdea.title,
       leaderName: leaderName,
-      read: false,
-      submittedAt: newIdea.submittedAt,
+      description: description,
+      members: members
     });
-    localStorage.setItem('teacherIdeaNotifications', JSON.stringify(notifications));
+
+    if (!result.success) {
+      alert(result.message || 'Error submitting idea');
+      return;
+    }
 
     // Show success message
     alert('Project idea submitted successfully!');
